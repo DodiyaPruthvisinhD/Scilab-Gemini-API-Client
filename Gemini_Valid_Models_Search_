@@ -1,0 +1,58 @@
+#search for valid  modeel available to your account via api
+#run it on sci notes
+
+function list_models()
+    // 1. SETUP
+    dq = ascii(34); 
+    api_key = "Your API Key"; // Your Key
+    
+    // We access the "models" endpoint directly
+    url = "https://generativelanguage.googleapis.com/v1beta/models?key=" + api_key;
+    
+    disp("Contacting Google to find valid models...");
+    
+    // Simple GET request
+    cmd = "curl -k -s " + dq + url + dq;
+    
+    try
+        response_lines = unix_g(cmd);
+        full_response = strcat(response_lines, " ");
+        
+        // 2. EXTRACT NAMES
+        // We look for patterns like "name": "models/gemini-..."
+        // A simple split approach to print them all
+        
+        tokens = strsplit(full_response, dq);
+        n = size(tokens, 1);
+        
+        disp(" ");
+        disp("====== VALID MODELS FOR YOU ======");
+        
+        found_any = %f;
+        
+        for i = 1:n
+            t = tokens(i);
+            // Check if this token starts with "models/"
+            if strindex(t, "models/") == 1 then
+                // Check if it supports "generateContent" (usually implies it's a chat model)
+                // We just print everything starting with models/ for safety
+                disp(t);
+                found_any = %t;
+            end
+        end
+        
+        if ~found_any then
+            disp("No models found in the list. Raw response:");
+            disp(full_response);
+        end
+        
+        disp("==================================");
+        
+    catch
+        disp("Error running diagnostic:");
+        disp(lasterror());
+    end
+endfunction
+
+// Automatically run it
+list_models();
