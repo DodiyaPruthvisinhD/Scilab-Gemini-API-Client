@@ -9,8 +9,8 @@ function answer = ask(prompt_text)
     // API KEY
     api_key = "YOUR-API-KEY";
     
-    // MODEL: gemini-2.5-flash (Fast & Valid for your key)
-    model = "gemini-2.5-flash"; 
+    // MODEL: "gemini-2.5-flash" (Fast & Valid if your had it in search)
+    model = "Your choosen gemni model from search"; 
     
     // ========================================================
     // 2. PREPARE PAYLOAD (File Method)
